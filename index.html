@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emploi du temps</title>
+<style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .controls, .global-controls, .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    label { font-weight: 600; }
+
+    select, input {
+      padding: 5px 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #2196F3;
+      border: none;
+      color: white;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover { background-color: #1976D2; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      text-align: center;
+      vertical-align: top;
+      min-width: 100px;
+      height: 65px;
+      position: relative;
+    }
+
+    th { background-color: #e9e9e9; font-weight: 600; padding: 6px; }
+
+    .cours {
+      border-radius: 5px;
+      font-size: 13px;
+      text-align: center;
+      padding: 4px;
+      color: white;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      word-break: break-word;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .cours small { font-size: 11px; opacity: 0.8; }
+
+    .supprimer-cours {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      margin-top: 3px;
+      font-size: 11px;
+      padding: 2px 4px;
+      cursor: pointer;
+    }
+
+    .supprimer-cours:hover { background-color: #c9302c; }
+
+    @media screen and (max-width: 800px) {
+      table { font-size: 12px; }
+      select, input { width: 120px; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <h1>Emploi du temps</h1>
+
+  <div class="global-controls">
+    <label>Vue :</label>
+    <select id="select-view">
+      <option value="classe">Classe</option>
+      <option value="prof">Professeur</option>
+      <option value="salle">Salle</option>
+    </select>
+
+    <label>Entité :</label>
+    <select id="select-entity"></select>
+  </div>
+
+  <div class="controls">
+    <label>Matière :</label>
+    <select id="select-matiere">
+      <option>Français</option><option>Anglais</option><option>Espagnol</option><option>Allemand</option><option>AMC</option>
+      <option>Philosophie</option><option>Mathématiques</option><option>SVT</option>
+      <option>SNT</option><option>PC</option> <option>Ens.Sci.</option><option>Histoire-géo</option>
+      <option>Sport</option><option>SES</option><option>EMC</option>
+      <option>Principalat</option><option>HGGSP</option><option>HLP</option>
+      <option>Arts Plastiques</option><option>Musique</option>
+    </select>
+
+    <label>Jour :</label>
+    <select id="select-jour">
+      <option>Lundi</option><option>Mardi</option><option>Mercredi</option>
+      <option>Jeudi</option><option>Vendredi</option>
+    </select>
+
+    <label>Créneau début :</label>
+    <select id="select-creneau">
+      <option value="1">8h25 - 9h20</option>
+      <option value="2">9h20 - 10h15</option>
+      <option value="3">10h25 - 11h20</option>
+      <option value="4">11h20 - 12h15</option>
+      <option value="5">12h15 - 13h10</option>
+      <option value="6">13h25 - 14h20</option>
+      <option value="7">14h20 - 15h15</option>
+      <option value="8">15h25 - 16h20</option>
+      <option value="9">16h20 - 17h15</option>
+    </select>
+
+    <label>Durée :</label>
+    <select id="select-nbCreneaux">
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+    </select>
+
+    <label>Professeur :</label>
+    <input id="input-prof" placeholder="Nom du professeur">
+
+    <label>Salle :</label>
+    <input id="input-salle" placeholder="Salle">
+
+    <label>Classe :</label>
+    <input id="input-classe" placeholder="Classe">
+
+    <label>Semaine :</label>
+    <select id="select-semaine">
+      <option value="Toutes">Toutes</option><option value="A">A</option><option value="B">B</option>
+    </select>
+
+    <button id="ajouter-cours-btn">Ajouter</button>
+  </div>
+
+  <table id="emploiDuTempsTable">
+    <thead>
+      <tr>
+        <th>Horaires</th>
+        <th>Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-creneau="1"><th>8h25 - 9h20</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="2"><th>9h20 - 10h15</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="3"><th>10h25 - 11h20</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="4"><th>11h20 - 12h15</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="5"><th>12h15 - 13h10</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="6"><th>13h25 - 14h20</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="7"><th>14h20 - 15h15</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="8"><th>15h25 - 16h20</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+      <tr data-creneau="9"><th>16h20 - 17h15</th><td data-jour="Lundi"></td><td data-jour="Mardi"></td><td data-jour="Mercredi"></td><td data-jour="Jeudi"></td><td data-jour="Vendredi"></td></tr>
+    </tbody>
+  </table>
+
+<div class="actions">
+  <button id="importer-btn">Importer JSON</button>
+  <button id="exporter-btn">Exporter JSON</button>
+  <input type="file" id="importer-fichier" accept=".json" style="display:none;">
+  <button id="exporter-pdf-btn">Exporter PDF</button>
+  <button id="exporter-tous-pdf-btn">Tout exporter PDF</button>
+  <button id="clear-storage-btn">Supprimer l'emploi du temps</button>
+  <button id="reset-all-btn">Réinitialiser le système</button> <!-- nouveau bouton -->
+</div>
+
+  
