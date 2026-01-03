@@ -3,7 +3,7 @@ const HAUTEUR_CRENEAU = 80;
 
 /* --- Couleurs des matières --- */
 const matieresCouleurs = {
-  "Français": "#FF7F7F","Anglais": "#87CEFA","Espagnol": "#FF0000","Allemand":"#FFA500",
+  "Français": "#FF7F7F","Anglais": "#87CEFA","Espagnol": "#FF0000","Allemand":"#F227F5",
   "Philosophie":"#4e4e4e","Mathématiques":"#0000FF","SVT":"#008000","SNT":"#A9A9A9",
   "PC":"#8A2BE2","Ens.Sci.":"#9400D3","Histoire-géo":"#D9B225","Sport":"#8B4513",
   "SES":"#FFA500","EMC":"#00008B","Principalat":"#000000","HGGSP":"#257FD9",
